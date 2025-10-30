@@ -18,5 +18,20 @@ namespace CarsConsoleApp.Data
         {
             optionsBuilder.UseSqlServer(@"Server=localhost;Database=CarsDb;Trusted_Connection=true;TrustServerCertificate=true;");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Car)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CarId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
